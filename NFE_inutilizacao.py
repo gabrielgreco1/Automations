@@ -5,13 +5,19 @@ import subprocess
 import sys
 import time
 from time import sleep
+import datetime
 
-log_file = open("log.txt", "w")
+
+log_file = open("C:\Automacao\AutomacoesPITON\INU_CTE_CLICK\log.txt", "w")
 sys.stdout = log_file
 pyautogui.FAILSAFE = False
 
-login = "xxxxxxxx.xxxxxx"
-password = "yyyyyyyyyyyyy"
+def print_with_timestamp(*args, **kwargs):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(timestamp, *args, **kwargs, file=log_file)
+
+login = "gabriel.greco"
+password = "Jardim5Secret!@#"
 modulo = "05" # Módulo Faturamento
 rotina = "Nf-e Sefaz"
 
@@ -21,10 +27,12 @@ subprocess.Popen('C:\\Users\\Administrator\\Desktop\\smartclient_x64\\smartclien
 if keyboard.press("esc"):
     sys.exit()
 
+print("Abrindo Protheus...")
+
 # Validacao que sera utilizada
 while not pyautogui.pixelMatchesColor(858,750, (0, 0, 255)): 
     time.sleep(2)
-print("Execucao ok!")
+print_with_timestamp("Execução Ok")
 
 pyautogui.moveTo(974,627)
 pyautogui.click(974,627)
@@ -33,6 +41,9 @@ pyautogui.click(1000, 729)
 
 # Aguardar o aplicativo carregar
 time.sleep(7.5)
+
+
+print_with_timestamp("Logando...")
 
 # Clicar no login e logar
 pyautogui.moveTo(904,545)
@@ -74,7 +85,7 @@ pyautogui.click(219,551)
 
 while not pyautogui.pixelMatchesColor(1669,796, (6,69,85)):
     time.sleep(3)
-print("Execucao ok! - Abrindo rotina")
+print_with_timestamp("Login realizado - Selecionando rotina...")
 
 # Confirmar empresa
 pyautogui.moveTo(1114,797)
@@ -83,7 +94,7 @@ pyautogui.click(1114,797)
 time.sleep(5)
 while not pyautogui.pixelMatchesColor(1157,378, (90,107,156)):
     time.sleep(2)
-print("Execucao ok! - Iniciando rotina")
+print_with_timestamp("Execucao ok! - Iniciando rotina")
 
 # Continuar pra rotina
 pyautogui.moveTo(1130,774, duration=1)
@@ -99,7 +110,7 @@ pyautogui.click(1133,778)
 
 while not pyautogui.pixelMatchesColor(1879,341, (28,157,189)):
     time.sleep(2)
-print("Execucao ok! - Rodando a rotina")
+print_with_timestamp("Execucao ok! - Rodando a rotina")
 
 #METODO with open para arquivos csv (leitura)?
 with open('C:\Automacao\AutomacoesPITON\INU_CTE_CLICK\INUTILIZACAO.csv','r') as arquivo:
@@ -107,10 +118,10 @@ with open('C:\Automacao\AutomacoesPITON\INU_CTE_CLICK\INUTILIZACAO.csv','r') as 
     for linha in arquivo:
         while not pyautogui.pixelMatchesColor(48,467, (255,255,255)):
             time.sleep(2)
-        print("Execucao ok! - Começando Inutilização")
         Inicial = linha.split(';')[0]
         Final = linha.split(';')[1]
         Numero = linha.split(';')[2]
+        print_with_timestamp("Começando Inutilização do período: ", Inicial, " até ", Final)
         pyautogui.click(508,230, duration=3)   # Outras acoes
         pyautogui.click(488,535, duration=1)  # Inutilizacao
         pyautogui.click(1330,880, duration=5)  # Avançar
@@ -125,10 +136,6 @@ with open('C:\Automacao\AutomacoesPITON\INU_CTE_CLICK\INUTILIZACAO.csv','r') as 
         pyautogui.click(1235,778, duration=1.5)
         pyautogui.click(1079,774, duration=1.5)
         pyautogui.click(1321,876, duration=1.5)
-        if keyboard.is_pressed('esc'):
-            break
+    print_with_timestamp("Processo finalizado!")
     log_file.close()
     arquivo.close()
-        
-
-
